@@ -136,12 +136,14 @@ public class teleop extends LinearOpMode {
         double forward;
         double rotate;
         double max;
+        double armForward;
+        double armBackward;
 
 
         /* Define and Initialize Motors */
         leftDrive  = hardwareMap.get(DcMotor.class, "left_front_drive"); //the left drivetrain motor
         rightDrive = hardwareMap.get(DcMotor.class, "right_front_drive"); //the right drivetrain motor
-        armMotor   = hardwareMap.get(DcMotor.class, "left_arm"); //the arm motor
+        armMotor   = hardwareMap.get(DcMotor.class, "arm"); //the arm motor
 
 
         /* Most skid-steer/differential drive robots require reversing one motor to drive forward.
@@ -189,9 +191,12 @@ public class teleop extends LinearOpMode {
 
             /* Set the drive and turn variables to follow the joysticks on the gamepad.
             the joysticks decrease as you push them up. So reverse the Y axis. */
-            forward = -gamepad1.left_stick_y;
-            rotate  = gamepad1.right_stick_x;
 
+            forward = -gamepad1.left_stick_y;
+            rotate = gamepad1.right_stick_x;
+
+            //armForward = gamepad2.left_stick_y;
+           //armBackward = gamepad2.right_stick_x;
 
             /* Here we "mix" the input channels together to find the power to apply to each motor.
             The both motors need to be set to a mix of how much you're retesting the robot move
@@ -208,13 +213,14 @@ public class teleop extends LinearOpMode {
             {
                 left /= max;
                 right /= max;
+                // armForward /= max;
             }
 
             /* Set the motor power to the variables we've mixed and normalized */
             leftDrive.setPower(left);
             rightDrive.setPower(right);
 
-
+            // armMotor.setPower(armForward);
 
             /* Here we handle the three buttons that have direct control of the intake speed.
             These control the continuous rotation servo that pulls elements into the robot,
@@ -230,15 +236,20 @@ public class teleop extends LinearOpMode {
             three if statements, then it will set the intake servo's power to multiple speeds in
             one cycle. Which can cause strange behavior. */
 
-            if (gamepad1.a) {
-                intake.setPower(INTAKE_COLLECT);
+            //gamepad 2 operations
+
+
+            if (gamepad2.a) {
+                intake.setPower(INTAKE_COLLECT); // intake sample
             }
-            else if (gamepad1.x) {
-                intake.setPower(INTAKE_OFF);
+            else if (gamepad2.x) {
+                intake.setPower(INTAKE_OFF); // intake off
             }
-            else if (gamepad1.b) {
-                intake.setPower(INTAKE_DEPOSIT);
+            else if (gamepad2.y) {
+                intake.setPower(INTAKE_DEPOSIT); //deposit sample
             }
+
+            armMotor.setPower(gamepad2.left_stick_y);
 
 
             /* Here we create a "fudge factor" for the arm position.
@@ -260,57 +271,68 @@ public class teleop extends LinearOpMode {
             it folds out the wrist to make sure it is in the correct orientation to intake, and it
             turns the intake on to the COLLECT mode.*/
 
-            if(gamepad1.right_bumper){
-                /* This is the intaking/collecting arm position */
+            /* if(gamepad1.right_bumper){
+                // This is the intaking/collecting arm position//
                 armPosition = ARM_COLLECT;
                 wrist.setPosition(WRIST_FOLDED_OUT);
                 intake.setPower(INTAKE_COLLECT);
             }
 
+
             else if (gamepad1.left_bumper){
-                    /* This is about 20° up from the collecting position to clear the barrier
+                    // This is about 20° up from the collecting position to clear the barrier
                     Note here that we don't set the wrist position or the intake power when we
                     select this "mode", this means that the intake and wrist will continue what
-                    they were doing before we clicked left bumper. */
+                    they were doing before we clicked left bumper. //
                 armPosition = ARM_CLEAR_BARRIER;
             }
 
             else if (gamepad1.y){
-                /* This is the correct height to score the sample in the LOW BASKET */
+                // This is the correct height to score the sample in the LOW BASKET //
                 armPosition = ARM_SCORE_SAMPLE_IN_LOW;
             }
-
-            else if (gamepad1.dpad_left) {
+            */
+            if (gamepad1.dpad_up) {
                     /* This turns off the intake, folds in the wrist, and moves the arm
                     back to folded inside the robot. This is also the starting configuration */
                 armPosition = ARM_COLLAPSED_INTO_ROBOT;
                 intake.setPower(INTAKE_OFF);
                 wrist.setPosition(WRIST_FOLDED_IN);
             }
-
+            /*
             else if (gamepad1.dpad_right){
-                /* This is the correct height to score SPECIMEN on the HIGH CHAMBER */
+                // This is the correct height to score SPECIMEN on the HIGH CHAMBER //
                 armPosition = ARM_SCORE_SPECIMEN;
                 wrist.setPosition(WRIST_FOLDED_IN);
             }
 
+
             else if (gamepad1.dpad_up){
-                /* This sets the arm to vertical to hook onto the LOW RUNG for hanging */
+                // This sets the arm to vertical to hook onto the LOW RUNG for hanging //
                 armPosition = ARM_ATTACH_HANGING_HOOK;
                 intake.setPower(INTAKE_OFF);
                 wrist.setPosition(WRIST_FOLDED_IN);
             }
-
-            else if (gamepad1.dpad_down){
+            */
+            // hanging
+            if (gamepad2.dpad_down){
                 /* this moves the arm down to lift the robot up once it has been hooked */
                 armPosition = ARM_WINCH_ROBOT;
                 intake.setPower(INTAKE_OFF);
                 wrist.setPosition(WRIST_FOLDED_IN);
             }
-
+            /*
+            else if (gamepad2.right_trigger > 0) {
+                    wrist.setPosition(WRIST_FOLDED_OUT);
+            }
+            else if (gamepad2.left_trigger > 0) {
+                wrist.setPosition(WRIST_FOLDED_IN);
+            }
+            */
             /* Here we set the target position of our arm to match the variable that was selected
             by the driver.
             We also set the target velocity (speed) the motor runs at, and use setMode to run it.*/
+
             armMotor.setTargetPosition((int) (armPosition  +armPositionFudgeFactor));
 
             ((DcMotorEx) armMotor).setVelocity(2100);
@@ -340,6 +362,7 @@ public class teleop extends LinearOpMode {
             if (((DcMotorEx) armMotor).isOverCurrent()){
                 telemetry.addLine("MOTOR EXCEEDED CURRENT LIMIT!");
             }
+
 
 
             /* send telemetry to the driver of the arm's current position and target position */
