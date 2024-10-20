@@ -236,7 +236,7 @@ public class teleop extends LinearOpMode {
             three if statements, then it will set the intake servo's power to multiple speeds in
             one cycle. Which can cause strange behavior. */
 
-            //gamepad 2 operations
+            //gamepad2 operations
 
 
             if (gamepad2.a) {
