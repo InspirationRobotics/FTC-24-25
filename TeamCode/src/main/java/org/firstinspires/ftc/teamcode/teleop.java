@@ -112,11 +112,11 @@ public class teleop extends LinearOpMode {
     /* Variables to store the speed the intake servo should be set at to intake, and deposit game elements. */
     final double INTAKE_COLLECT    = -1.0;
     final double INTAKE_OFF        =  0.0;
-    final double INTAKE_DEPOSIT    =  0.5;
+    final double INTAKE_DEPOSIT    =  0.75;
 
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
     final double WRIST_FOLDED_IN   = 0.8333;
-    final double WRIST_FOLDED_OUT  = 0.5;
+    final double WRIST_FOLDED_OUT  = 0.7;
 
     /* A number in degrees that the triggers can adjust the arm position by */
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
@@ -242,15 +242,19 @@ public class teleop extends LinearOpMode {
             if (gamepad2.a) {
                 intake.setPower(INTAKE_COLLECT); // intake sample
                 telemetry.addData("Intake collected:", INTAKE_COLLECT);
+                telemetry.addData("button y to deposit sample, button x to stop, GOOD LUCK", "inatke collect");
             }
             else if (gamepad2.x) {
                 intake.setPower(INTAKE_OFF); // intake off
                 telemetry.addData("Intake off:", INTAKE_OFF);
+                telemetry.addData("button a to collect sample, button y to deposit pixel, :)", "intake stop");
             }
             else if (gamepad2.y) {
                 intake.setPower(INTAKE_DEPOSIT); //deposit sample
                 telemetry.addData("Intake deposited:", INTAKE_DEPOSIT);
+                telemetry.addData("button a to collect pixel, button x to stop", "intake deposit");
             }
+
 
 
             /* Here we create a "fudge factor" for the arm position.
@@ -327,9 +331,11 @@ public class teleop extends LinearOpMode {
 
             if (gamepad2.right_bumper) {
                     wrist.setPosition(WRIST_FOLDED_OUT);
+                    telemetry.addData("Wrist has folded out", "wrist position" );
             }
             if (gamepad2.left_bumper){
                 wrist.setPosition(WRIST_FOLDED_IN);
+                telemetry.addData("Writs has folded in", "wrist position" );
             }
 
             /* Here we set the target position of our arm to match the variable that was selected
