@@ -241,15 +241,16 @@ public class teleop extends LinearOpMode {
 
             if (gamepad2.a) {
                 intake.setPower(INTAKE_COLLECT); // intake sample
+                telemetry.addData("Intake collected:", INTAKE_COLLECT);
             }
             else if (gamepad2.x) {
                 intake.setPower(INTAKE_OFF); // intake off
+                telemetry.addData("Intake off:", INTAKE_OFF);
             }
             else if (gamepad2.y) {
                 intake.setPower(INTAKE_DEPOSIT); //deposit sample
+                telemetry.addData("Intake deposited:", INTAKE_DEPOSIT);
             }
-
-            armMotor.setPower(gamepad2.left_stick_y);
 
 
             /* Here we create a "fudge factor" for the arm position.
@@ -260,7 +261,7 @@ public class teleop extends LinearOpMode {
             than the other, it "wins out". This variable is then multiplied by our FUDGE_FACTOR.
             The FUDGE_FACTOR is the number of degrees that we can adjust the arm by with this function. */
 
-            armPositionFudgeFactor = FUDGE_FACTOR * (gamepad1.right_trigger + (-gamepad1.left_trigger));
+            armPositionFudgeFactor = FUDGE_FACTOR * (gamepad2.right_trigger + (-gamepad2.left_trigger));
 
 
 
@@ -298,6 +299,7 @@ public class teleop extends LinearOpMode {
                 armPosition = ARM_COLLAPSED_INTO_ROBOT;
                 intake.setPower(INTAKE_OFF);
                 wrist.setPosition(WRIST_FOLDED_IN);
+                telemetry.addData("Arm:","init position");
             }
             /*
             else if (gamepad1.dpad_right){
@@ -320,15 +322,16 @@ public class teleop extends LinearOpMode {
                 armPosition = ARM_WINCH_ROBOT;
                 intake.setPower(INTAKE_OFF);
                 wrist.setPosition(WRIST_FOLDED_IN);
+                telemetry.addData("Arm in:", "hanging position");
             }
-            /*
-            else if (gamepad2.right_trigger > 0) {
+
+            if (gamepad2.right_bumper) {
                     wrist.setPosition(WRIST_FOLDED_OUT);
             }
-            else if (gamepad2.left_trigger > 0) {
+            if (gamepad2.left_bumper){
                 wrist.setPosition(WRIST_FOLDED_IN);
             }
-            */
+
             /* Here we set the target position of our arm to match the variable that was selected
             by the driver.
             We also set the target velocity (speed) the motor runs at, and use setMode to run it.*/
