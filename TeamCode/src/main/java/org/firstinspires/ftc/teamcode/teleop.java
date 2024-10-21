@@ -136,13 +136,11 @@ public class teleop extends LinearOpMode {
         double forward;
         double rotate;
         double max;
-        double armForward;
-        double armBackward;
 
 
         /* Define and Initialize Motors */
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_front_drive"); //the left drivetrain motor
-        rightDrive = hardwareMap.get(DcMotor.class, "right_front_drive"); //the right drivetrain motor
+        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive"); //the left drivetrain motor
+        rightDrive = hardwareMap.get(DcMotor.class, "right_drive"); //the right drivetrain motor
         armMotor   = hardwareMap.get(DcMotor.class, "arm"); //the arm motor
 
 
@@ -195,8 +193,6 @@ public class teleop extends LinearOpMode {
             forward = -gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
 
-            //armForward = gamepad2.left_stick_y;
-           //armBackward = gamepad2.right_stick_x;
 
             /* Here we "mix" the input channels together to find the power to apply to each motor.
             The both motors need to be set to a mix of how much you're retesting the robot move
@@ -213,14 +209,12 @@ public class teleop extends LinearOpMode {
             {
                 left /= max;
                 right /= max;
-                // armForward /= max;
             }
 
             /* Set the motor power to the variables we've mixed and normalized */
             leftDrive.setPower(left);
             rightDrive.setPower(right);
 
-            // armMotor.setPower(armForward);
 
             /* Here we handle the three buttons that have direct control of the intake speed.
             These control the continuous rotation servo that pulls elements into the robot,
