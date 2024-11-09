@@ -92,11 +92,11 @@ public class autonomous extends LinearOpMode {
 
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
-        // Step 1:  Drive forward for 0.3 seconds (reversing cause our thing reversed)
+        // Step 1:  Drive forward for 0.15 seconds (reversing cause our thing reversed)
         leftDrive.setPower(FORWARD_SPEED);
         rightDrive.setPower(FORWARD_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.2)) {
+        while (opModeIsActive() && (runtime.seconds() < 0.15)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
