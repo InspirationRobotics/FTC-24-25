@@ -92,7 +92,14 @@ public class auto extends LinearOpMode {
 
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
-        // Step 1:  Turn right for 0.95 seconds)
+        //Step 1: Go forward a little bit so the robot doesn't drive into the wall
+        leftDrive.setPower(FORWARD_SPEED);
+        rightDrive.setPower(FORWARD_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 0.15)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        // Step 2:  Turn right for 0.95 seconds)
         leftDrive.setPower(TURN_SPEED);
         rightDrive.setPower(-TURN_SPEED);
         runtime.reset();
@@ -100,7 +107,7 @@ public class auto extends LinearOpMode {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-        //Step 2: Go forward for .4 seconds
+        //Step 3: Go forward for .4 seconds
         leftDrive.setPower(FORWARD_SPEED);
         rightDrive.setPower(FORWARD_SPEED);
         runtime.reset();
@@ -108,7 +115,7 @@ public class auto extends LinearOpMode {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-        // Step 3:  Drive forward for 1 seconds (reversing cause our thing reversed)
+        // Step 4:  Drive forward for 1 seconds (reversing cause our thing reversed)
         leftDrive.setPower(FORWARD_SPEED);
         rightDrive.setPower(FORWARD_SPEED);
         runtime.reset();
@@ -116,7 +123,7 @@ public class auto extends LinearOpMode {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-        // Step 4:  Stop
+        // Step 5:  Stop
         leftDrive.setPower(0);
         rightDrive.setPower(0);
 
