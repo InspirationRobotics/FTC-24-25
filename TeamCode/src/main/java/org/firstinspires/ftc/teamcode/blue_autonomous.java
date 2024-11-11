@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -53,7 +54,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: Auto Drive By Time", group="Robot")
+@Autonomous(name="blue_autonomous", group="Robot")
 
 public class blue_autonomous extends LinearOpMode {
 
@@ -61,9 +62,11 @@ public class blue_autonomous extends LinearOpMode {
     private DcMotor   leftDrive   = null;
     private DcMotor   rightDrive  = null;
 
+    public Servo wrist       = null; //the wrist servo
+
     private ElapsedTime     runtime = new ElapsedTime();
 
-
+    final double WRIST_FOLDED_OUT  = 0.45;
     static final double     FORWARD_SPEED = 0.6;
     static final double     TURN_SPEED    = 0.5;
 
@@ -74,6 +77,7 @@ public class blue_autonomous extends LinearOpMode {
         // Initialize the drive system variables.
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        wrist  = hardwareMap.get(Servo.class, "wrist");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -81,6 +85,7 @@ public class blue_autonomous extends LinearOpMode {
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
+        wrist.setPosition(WRIST_FOLDED_OUT);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -101,8 +106,8 @@ public class blue_autonomous extends LinearOpMode {
         }
 
         // Step 2:  Turn left for 0.95 seconds)
-        leftDrive.setPower(TURN_SPEED);
-        rightDrive.setPower(-TURN_SPEED);
+        leftDrive.setPower(-TURN_SPEED);
+        rightDrive.setPower(TURN_SPEED);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 0.95)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
