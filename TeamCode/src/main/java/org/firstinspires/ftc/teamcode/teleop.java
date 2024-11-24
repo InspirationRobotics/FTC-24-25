@@ -115,8 +115,8 @@ public class teleop extends LinearOpMode {
     final double INTAKE_DEPOSIT    =  0.5;
 
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
-    final double WRIST_FOLDED_IN   = -0.9;
-    final double WRIST_FOLDED_OUT  = 0.45;
+    final double WRIST_FOLDED_IN   = 1.0;
+    final double WRIST_FOLDED_OUT  = 0.65;
 
     /* A number in degrees that the triggers can adjust the arm position by */
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
