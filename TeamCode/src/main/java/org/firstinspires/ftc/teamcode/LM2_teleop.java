@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name="LM2 teleop)", group="Robot")
 
@@ -13,7 +14,7 @@ public class LM2_teleop extends LinearOpMode {
     public DcMotor left_back = null;
     public DcMotor right_back = null;
 
-    public double speed = 1.0;
+    public double speed = 0.5;
 
     @Override
     public void runOpMode() {
@@ -24,7 +25,7 @@ public class LM2_teleop extends LinearOpMode {
 
         left_front.setDirection(DcMotor.Direction.FORWARD);
         right_front.setDirection(DcMotor.Direction.REVERSE);
-        left_back.setDirection(DcMotor.Direction.FORWARD);
+        left_back.setDirection(DcMotor.Direction.REVERSE);
         right_back.setDirection(DcMotor.Direction.REVERSE);
 
         left_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -37,11 +38,11 @@ public class LM2_teleop extends LinearOpMode {
         while (opModeIsActive()) {
 
             left_front.setPower(gamepad1.left_stick_y);
-            left_back.setPower(-gamepad1.left_stick_y);
-            right_front.setPower(gamepad1.right_stick_y);
-            right_back.setPower(-gamepad1.right_stick_y);
+            left_back.setPower(gamepad1.left_stick_y);
+            right_front.setPower(gamepad1.left_stick_y);
+            right_back.setPower(gamepad1.left_stick_y);
 
-            // turn left (speed = 1.0)
+            // turn left
             if(gamepad1.left_bumper){
                 left_front.setPower(-speed);
                 left_back.setPower(-speed);
@@ -49,7 +50,7 @@ public class LM2_teleop extends LinearOpMode {
                 right_back.setPower(speed);
             }
 
-            // turn right (speed = 1.0)
+            // turn right
             if(gamepad1.right_bumper){
                 left_front.setPower(speed);
                 left_back.setPower(speed);
@@ -57,16 +58,16 @@ public class LM2_teleop extends LinearOpMode {
                 right_back.setPower(-speed);
             }
 
-            // strafe right (speed = 1.0)
-            if(gamepad1.right_stick_x > 0){
+            // strafe right
+            if(gamepad1.right_stick_x > 0.1){
                 left_front.setPower(speed);
                 left_back.setPower(-speed);
                 right_front.setPower(-speed);
                 right_back.setPower(speed);
             }
 
-            // strafe left (speed = 1.0)
-            if(gamepad1.right_stick_x > 0){
+            // strafe left
+            if(gamepad1.right_stick_x < -0.1){
                 left_front.setPower(-speed);
                 left_back.setPower(speed);
                 right_front.setPower(speed);
