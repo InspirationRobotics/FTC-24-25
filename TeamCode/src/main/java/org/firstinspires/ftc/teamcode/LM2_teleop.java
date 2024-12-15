@@ -5,8 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp(name="LM2 teleop)", group="Robot")
+@TeleOp(name="Into the Deep - LM2 teleop", group="Robot")
 
 public class LM2_teleop extends LinearOpMode {
 
@@ -37,7 +38,6 @@ public class LM2_teleop extends LinearOpMode {
     private enum PivotModes {UP, HOLD, DOWN};
     private PivotModes pivotMode;
 
-    public double speed = 0.5;
 
     @Override
     public void runOpMode() {
@@ -58,10 +58,10 @@ public class LM2_teleop extends LinearOpMode {
         pivot.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         pivot_home_pos = 0;
 
-        left_front.setDirection(DcMotor.Direction.FORWARD);
-        right_front.setDirection(DcMotor.Direction.REVERSE);
+        left_front.setDirection(DcMotor.Direction.REVERSE);
+        right_front.setDirection(DcMotor.Direction.FORWARD);
         left_back.setDirection(DcMotor.Direction.REVERSE);
-        right_back.setDirection(DcMotor.Direction.REVERSE);
+        right_back.setDirection(DcMotor.Direction.FORWARD);
 
         left_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -70,47 +70,26 @@ public class LM2_teleop extends LinearOpMode {
 
         waitForStart();
 
+
         while (opModeIsActive()) {
 
-            left_front.setPower(gamepad1.left_stick_y);
-            left_back.setPower(gamepad1.left_stick_y);
-            right_front.setPower(gamepad1.left_stick_y);
-            right_back.setPower(gamepad1.left_stick_y);
+            double speed = -gamepad1.left_stick_y;
+            double turn = gamepad1.right_stick_x;
+            double  strafe = gamepad1.left_stick_x;
 
-            // turn left
-            if(gamepad1.left_bumper){
-                left_front.setPower(-speed);
-                left_back.setPower(-speed);
-                right_front.setPower(speed);
-                right_back.setPower(speed);
-            }
+            double leftFrontMovement = speed + turn + strafe;
+            double rightFrontMovement = speed - turn - strafe;
+            double leftBackMovement = speed + turn - strafe;
+            double rightBackMovement = speed - turn + strafe;
 
-            // turn right
-            if(gamepad1.right_bumper){
-                left_front.setPower(speed);
-                left_back.setPower(speed);
-                right_front.setPower(-speed);
-                right_back.setPower(-speed);
-            }
+            left_front.setPower(leftFrontMovement);
+            right_front.setPower(rightFrontMovement);
+            left_back.setPower(leftBackMovement);
+            right_back.setPower(rightBackMovement);
 
-            // strafe right
-            if(gamepad1.right_stick_x > 0.1){
-                left_front.setPower(speed);
-                left_back.setPower(-speed);
-                right_front.setPower(-speed);
-                right_back.setPower(speed);
-            }
-
-            // strafe left
-            if(gamepad1.right_stick_x < -0.1){
-                left_front.setPower(-speed);
-                left_back.setPower(speed);
-                right_front.setPower(speed);
-                right_back.setPower(-speed);
-            }
-            boolean intakeInButton = gamepad1.a;
-            boolean intakeOutButton = gamepad1.b;
-            boolean intakeOffButton = gamepad1.x;
+            boolean intakeInButton = gamepad2.a;
+            boolean intakeOutButton = gamepad2.y;
+            boolean intakeOffButton = gamepad2.x;
 
             // This conditional reduces ambiguity when multiple buttons are pressed.
             if (intakeInButton && intakeOutButton) {
@@ -119,14 +98,14 @@ public class LM2_teleop extends LinearOpMode {
                 intakeInButton = intakeOutButton = false;
             }
 
-            boolean extensionOutButton = gamepad1.left_trigger > 0.2;
-            boolean extensionInButton = gamepad1.left_bumper;
+            boolean extensionOutButton = gamepad2.left_trigger > 0.2;
+            boolean extensionInButton = gamepad2.left_bumper;
             if (extensionOutButton && extensionInButton) {
                 extensionOutButton = false;
             }
 
-            boolean pivotUpButton = gamepad1.right_bumper;
-            boolean pivotDownButton = gamepad1.right_trigger > 0.2;
+            boolean pivotUpButton = gamepad2.right_bumper;
+            boolean pivotDownButton = gamepad2.right_trigger > 0.2;
             if (pivotUpButton && pivotDownButton) {
                 pivotUpButton = false;
             }
@@ -161,10 +140,19 @@ public class LM2_teleop extends LinearOpMode {
                 pivotMode = PivotModes.HOLD;
             }
 
-            intake.setPower(intakePower);
-            extension.setPower(extensionPower);
-            pivot.setTargetPosition(pivot_target_pos);
-            pivot.setPower(1.0);
+            double pivotPower;
+        if (pivotMode == PivotModes.UP) {
+           pivotPower = PIVOT_UP_POWER;
+        } else if (pivotMode == PivotModes.DOWN) {
+            pivotPower = PIVOT_DOWN_POWER;
+        } else {
+            pivotPower = PIVOT_HOLD_POWER;
+        }
+
+//            intake.setPower(intakePower);
+//            extension.setPower(extensionPower);
+//            pivot.setTargetPosition(pivot_target_pos);
+//            pivot.setPower(1.0);
 
             String pivot_mode_str;
             if (pivotMode == PivotModes.UP) {
@@ -182,7 +170,5 @@ public class LM2_teleop extends LinearOpMode {
             telemetry.update();
         }
 
-
-        }
     }
 }
