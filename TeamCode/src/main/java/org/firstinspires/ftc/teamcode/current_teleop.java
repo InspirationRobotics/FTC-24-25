@@ -5,39 +5,38 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp(name="Into the Deep - LM2 teleop", group="Robot")
+@TeleOp(name="LM2 teleop", group="Robot")
 
-public class LM2_teleop extends LinearOpMode {
+public class current_teleop extends LinearOpMode {
 
     public DcMotor left_front = null;
     public DcMotor right_front = null;
     public DcMotor left_back = null;
     public DcMotor right_back = null;
     private CRServo intake = null;
-    private DcMotor extension = null;
+    public DcMotor extension = null;
     private DcMotorEx pivot = null;
 
+    private int pivot_target_pos;
+    private int pivot_home_pos;
     private double INTAKE_IN_POWER = 1.0;
     private double INTAKE_OUT_POWER = -1.0;
     private double INTAKE_OFF_POWER = 0.0;
 
-    private double intakePower = INTAKE_OFF_POWER;
-
-
     private double EXTENSION_OUT_POWER = 1.0;
     private double EXTENSION_IN_POWER = -1.0;
 
-    private int pivot_target_pos;
-    private int pivot_home_pos;
+    private double EXTENSION_OFF_POWER = 0.0;
+    private double intakePower = INTAKE_OFF_POWER;
+    double extensionPower = EXTENSION_OFF_POWER;
 
-    private double PIVOT_UP_POWER = 0.25;
-    private double PIVOT_DOWN_POWER = -0.0125;
+    double pivotPower;
+    private double PIVOT_UP_POWER = 1.00;
+    private double PIVOT_DOWN_POWER = -0.5;
     private double PIVOT_HOLD_POWER = 0.001;
     private enum PivotModes {UP, HOLD, DOWN};
     private PivotModes pivotMode;
-
 
     @Override
     public void runOpMode() {
@@ -50,10 +49,10 @@ public class LM2_teleop extends LinearOpMode {
         pivot = hardwareMap.get(DcMotorEx.class, "pivot");
 
         intake.setDirection(CRServo.Direction.FORWARD); // Forward should INTAKE.
-        extension.setDirection(DcMotor.Direction.REVERSE); // Forward should EXTEND.
-        pivot.setDirection(DcMotor.Direction.REVERSE); // Forward should pivot UP, or away from the stowed position.
+//        extension.setDirection(DcMotor.Direction.REVERSE); // Forward should EXTEND.
+//        pivot.setDirection(DcMotor.Direction.REVERSE); // Forward should pivot UP, or away from the stowed position.
 
-//        pivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //pivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         pivot.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         pivot_home_pos = 0;
@@ -93,15 +92,10 @@ public class LM2_teleop extends LinearOpMode {
 
             boolean extensionOutButton = gamepad2.left_trigger > 0.2;
             boolean extensionInButton = gamepad2.left_bumper;
-            if (extensionOutButton && extensionInButton) {
-                extensionOutButton = false;
-            }
 
-            boolean pivotUpButton = gamepad2.right_bumper;
+            boolean pivotUpButton = gamepad2.dpad_up;
             boolean pivotDownButton = gamepad2.right_trigger > 0.2;
-            if (pivotUpButton && pivotDownButton) {
-                pivotUpButton = false;
-            }
+
 
             // INTAKE CODE
             if (intakeInButton) {
@@ -113,16 +107,15 @@ public class LM2_teleop extends LinearOpMode {
             }
 
             // EXTENSION CODE
-            double extensionPower;
             if (extensionOutButton) {
                 extensionPower = EXTENSION_OUT_POWER;
             } else if (extensionInButton) {
                 extensionPower = EXTENSION_IN_POWER;
             } else {
-                extensionPower = 0;
+                extensionPower = EXTENSION_OFF_POWER;
             }
 
-            // Determine pivot mode
+            // PIVOT CODE
             if (pivotUpButton) {
                 pivotMode = PivotModes.UP;
                 pivot_target_pos += 5;
@@ -133,33 +126,24 @@ public class LM2_teleop extends LinearOpMode {
                 pivotMode = PivotModes.HOLD;
             }
 
-            double pivotPower;
-        if (pivotMode == PivotModes.UP) {
-           pivotPower = PIVOT_UP_POWER;
-        } else if (pivotMode == PivotModes.DOWN) {
-            pivotPower = PIVOT_DOWN_POWER;
-        } else {
-            pivotPower = PIVOT_HOLD_POWER;
-        }
-
-        intake.setPower(intakePower);
-//            extension.setPower(extensionPower);
-//            pivot.setTargetPosition(pivot_target_pos);
-//      pivot.setPower(pivotPower);
-
-            String pivot_mode_str;
             if (pivotMode == PivotModes.UP) {
-                pivot_mode_str = "UP";
+                pivotPower = PIVOT_UP_POWER;
             } else if (pivotMode == PivotModes.DOWN) {
-                pivot_mode_str = "DOWN";
+                pivotPower = PIVOT_DOWN_POWER;
             } else {
-                pivot_mode_str = "HOLD";
+                pivotPower = PIVOT_HOLD_POWER;
             }
+
+            intake.setPower(intakePower);
+            extension.setPower(extensionPower);
+            pivot.setTargetPosition(pivot_target_pos);
+            pivot.setPower(pivotPower);
+
+
             // UPDATE TELEMETRY
             telemetry.addData("Intake", "%%4.2f", intakePower);
             telemetry.addData("Extension", "%4.2f", extension.getPower());
             telemetry.addData("Pivot Current/Target/power", "%d, %d, %4.2f", pivot.getCurrentPosition(), pivot.getTargetPosition(),pivot.getPower());
-            telemetry.addData("Pivot MODE", "%s", pivot_mode_str);
             telemetry.update();
         }
 
