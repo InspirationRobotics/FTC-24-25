@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name="Into the Deep - LM2 teleop", group="Robot")
 
@@ -59,7 +60,7 @@ public class LM2_teleop extends LinearOpMode {
 
         left_front.setDirection(DcMotor.Direction.REVERSE);
         right_front.setDirection(DcMotor.Direction.REVERSE);
-        left_back.setDirection(DcMotor.Direction.FORWARD);
+        left_back.setDirection(DcMotor.Direction.REVERSE);
         right_back.setDirection(DcMotor.Direction.FORWARD);
 
         left_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
