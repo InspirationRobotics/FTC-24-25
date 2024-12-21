@@ -32,7 +32,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -54,19 +53,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="blue_autonomous_long", group="Robot")
+@Autonomous(name="blue_autonomous_left", group="Robot")
 
-public class blue_autonomous_long extends LinearOpMode {
+public class blue_autonomous_left extends LinearOpMode {
 
     /* Declare OpMode members. */
-    private DcMotor   leftDrive   = null;
-    private DcMotor   rightDrive  = null;
-
-    public Servo wrist       = null; //the wrist servo
-
+    public DcMotor left_front = null;
+    public DcMotor right_front = null;
+    public DcMotor left_back = null;
+    public DcMotor right_back = null;
     private ElapsedTime     runtime = new ElapsedTime();
 
-    final double WRIST_FOLDED_OUT  = 0.45;
     static final double     FORWARD_SPEED = 0.6;
     static final double     TURN_SPEED    = 0.5;
 
@@ -75,17 +72,19 @@ public class blue_autonomous_long extends LinearOpMode {
     public void runOpMode() {
 
         // Initialize the drive system variables.
-        leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        wrist  = hardwareMap.get(Servo.class, "wrist");
+        left_front = hardwareMap.get(DcMotor.class, "leftFront");
+        right_front = hardwareMap.get(DcMotor.class, "rightFront");
+        left_back = hardwareMap.get(DcMotor.class, "leftBack");
+        right_back = hardwareMap.get(DcMotor.class, "rightBack");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        left_front.setDirection(DcMotor.Direction.REVERSE);
+        right_front.setDirection(DcMotor.Direction.FORWARD);
+        left_back.setDirection(DcMotor.Direction.REVERSE);
+        right_back.setDirection(DcMotor.Direction.FORWARD);
 
-        wrist.setPosition(WRIST_FOLDED_OUT);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -97,8 +96,11 @@ public class blue_autonomous_long extends LinearOpMode {
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
         // Step 1:  Drive forward for 0.15 seconds (reversing cause our thing reversed)
-        leftDrive.setPower(FORWARD_SPEED);
-        rightDrive.setPower(FORWARD_SPEED);
+        left_front.setPower(FORWARD_SPEED);
+        right_front.setPower(FORWARD_SPEED);
+        left_back.setPower(FORWARD_SPEED);
+        right_back.setPower(FORWARD_SPEED);
+
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 0.15)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
@@ -106,8 +108,10 @@ public class blue_autonomous_long extends LinearOpMode {
         }
 
         // Step 2:  Turn left for 0.95 seconds)
-        leftDrive.setPower(-TURN_SPEED);
-        rightDrive.setPower(TURN_SPEED);
+        left_front.setPower(FORWARD_SPEED);
+        right_front.setPower(FORWARD_SPEED);
+        left_back.setPower(FORWARD_SPEED);
+        right_back.setPower(FORWARD_SPEED);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 0.95)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
@@ -115,17 +119,43 @@ public class blue_autonomous_long extends LinearOpMode {
         }
 
         // Step 3:  Drive forward for 0.5 seconds (reversing cause our thing reversed)
-        leftDrive.setPower(FORWARD_SPEED);
-        rightDrive.setPower(FORWARD_SPEED);
+        left_front.setPower(-FORWARD_SPEED);
+        right_front.setPower(FORWARD_SPEED);
+        left_back.setPower(-FORWARD_SPEED);
+        right_back.setPower(FORWARD_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 2.0)) {
+        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
 
+        // Step 4:  Turn right for 0.95 seconds)
+        left_front.setPower(FORWARD_SPEED);
+        right_front.setPower(-FORWARD_SPEED);
+        left_back.setPower(FORWARD_SPEED);
+        right_back.setPower(-FORWARD_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 0.95)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
+        // Step 5 :  Drive forward for 0.15 seconds (reversing cause our thing reversed)
+        left_front.setPower(FORWARD_SPEED);
+        right_front.setPower(FORWARD_SPEED);
+        left_back.setPower(FORWARD_SPEED);
+        right_back.setPower(FORWARD_SPEED);
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 0.15)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
         // Step 4:  Stop
-        leftDrive.setPower(0);
-        rightDrive.setPower(0);
+        left_front.setPower(FORWARD_SPEED);
+        right_front.setPower(FORWARD_SPEED);
+        left_back.setPower(FORWARD_SPEED);
+        right_back.setPower(FORWARD_SPEED);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

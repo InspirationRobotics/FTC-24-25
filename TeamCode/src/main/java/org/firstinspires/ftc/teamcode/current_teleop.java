@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name="LM2 teleop", group="Robot")
 
@@ -34,7 +35,8 @@ public class current_teleop extends LinearOpMode {
     double pivotPower;
     private double PIVOT_UP_POWER = 0.8;
     private double PIVOT_DOWN_POWER = -0.7;
-    private double PIVOT_HOLD_POWER = 0.005;
+    private double PIVOT_HOLD_POWER = 0.010;
+
     private enum PivotModes {UP, HOLD, DOWN};
     private PivotModes pivotMode;
 
@@ -52,13 +54,13 @@ public class current_teleop extends LinearOpMode {
 //        extension.setDirection(DcMotor.Direction.REVERSE); // Forward should EXTEND.
 //        pivot.setDirection(DcMotor.Direction.REVERSE); // Forward should pivot UP, or away from the stowed position.
 
-        //pivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // pivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         pivot.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         pivot_home_pos = 0;
 
         left_front.setDirection(DcMotor.Direction.REVERSE);
-        right_front.setDirection(DcMotor.Direction.REVERSE);
+        right_front.setDirection(DcMotor.Direction.FORWARD);
         left_back.setDirection(DcMotor.Direction.REVERSE);
         right_back.setDirection(DcMotor.Direction.FORWARD);
 
@@ -72,19 +74,22 @@ public class current_teleop extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            double speed = -gamepad1.left_stick_y;
-            double turn = gamepad1.right_stick_x;
-            double  strafe = gamepad1.left_stick_x;
+            double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+            double lateral =  -gamepad1.left_stick_x;
+            double yaw     =  gamepad1.right_stick_x;
 
-            double leftFrontMovement = speed + turn + strafe;
-            double rightFrontMovement = speed - turn - strafe;
-            double leftBackMovement = speed + turn - strafe;
-            double rightBackMovement = speed - turn + strafe;
+            // DRIVE CODE
+            // Combine the joystick requests for each axis-motion to determine each wheel's power.
+            // Set up a variable for each drive wheel to save the power level for telemetry.
+            double leftFrontPower  = axial + lateral + yaw;
+            double rightFrontPower = axial - lateral - yaw;
+            double leftBackPower   = axial - lateral + yaw;
+            double rightBackPower  = axial + lateral - yaw;
 
-            left_front.setPower(leftFrontMovement);
-            right_front.setPower(rightFrontMovement);
-            left_back.setPower(leftBackMovement);
-            right_back.setPower(rightBackMovement);
+            left_front.setPower(leftFrontPower);
+            right_front.setPower(rightFrontPower);
+            left_back.setPower(leftBackPower);
+            right_back.setPower(rightBackPower);
 
             boolean intakeInButton = gamepad2.a;
             boolean intakeOutButton = gamepad2.y;
@@ -93,7 +98,7 @@ public class current_teleop extends LinearOpMode {
             boolean extensionOutButton = gamepad2.left_trigger > 0.2;
             boolean extensionInButton = gamepad2.left_bumper;
 
-            boolean pivotUpButton = gamepad2.dpad_up;
+            boolean pivotUpButton = gamepad2.right_bumper;
             boolean pivotDownButton = gamepad2.right_trigger > 0.2;
 
 
