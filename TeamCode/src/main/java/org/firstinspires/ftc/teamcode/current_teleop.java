@@ -32,9 +32,9 @@ public class current_teleop extends LinearOpMode {
     double extensionPower = EXTENSION_OFF_POWER;
 
     double pivotPower;
-    private double PIVOT_UP_POWER = 0.25;
-    private double PIVOT_DOWN_POWER = -0.0125;
-    private double PIVOT_HOLD_POWER = 0.001;
+    private double PIVOT_UP_POWER = 0.8;
+    private double PIVOT_DOWN_POWER = -0.7;
+    private double PIVOT_HOLD_POWER = 0.005;
     private enum PivotModes {UP, HOLD, DOWN};
     private PivotModes pivotMode;
 
