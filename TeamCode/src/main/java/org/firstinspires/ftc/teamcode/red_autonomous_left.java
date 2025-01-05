@@ -64,7 +64,7 @@ public class red_autonomous_left extends LinearOpMode {
     public DcMotor right_back = null;
     private ElapsedTime     runtime = new ElapsedTime();
 
-    static final double     FORWARD_SPEED = 0.8;
+    static final double     FORWARD_SPEED = 0.6;
     static final double     TURN_SPEED    = 0.5;
 
 
@@ -96,37 +96,19 @@ public class red_autonomous_left extends LinearOpMode {
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
         // Step 1:  Strafe left for 2.0 seconds
-        left_front.setPower(-FORWARD_SPEED);
-        right_front.setPower(FORWARD_SPEED);
-        left_back.setPower(FORWARD_SPEED);
-        right_back.setPower(-FORWARD_SPEED);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 2.0)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
-        // Step 2:  Drive forward for 3 seconds
-        left_front.setPower(FORWARD_SPEED);
-        right_front.setPower(FORWARD_SPEED);
+      left_front.setPower(FORWARD_SPEED);
+       right_front.setPower(FORWARD_SPEED);
         left_back.setPower(FORWARD_SPEED);
         right_back.setPower(FORWARD_SPEED);
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 4.0)) {
+        while (opModeIsActive() && (runtime.seconds() < 9)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
 
-        // Step 4:  Stop
-        left_front.setPower(FORWARD_SPEED);
-        right_front.setPower(FORWARD_SPEED);
-        left_back.setPower(FORWARD_SPEED);
-        right_back.setPower(FORWARD_SPEED);
 
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);
+
+
     }
 }
