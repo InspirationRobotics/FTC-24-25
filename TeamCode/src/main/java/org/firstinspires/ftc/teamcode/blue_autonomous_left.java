@@ -64,7 +64,7 @@ public class blue_autonomous_left extends LinearOpMode {
     public DcMotor right_back = null;
     private ElapsedTime     runtime = new ElapsedTime();
 
-    static final double     FORWARD_SPEED = 0.6;
+    static final double     FORWARD_SPEED = 1.0;
     static final double     TURN_SPEED    = 0.5;
 
 
@@ -94,63 +94,20 @@ public class blue_autonomous_left extends LinearOpMode {
         waitForStart();
 
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
-
-        // Step 1:  Drive forward for 0.15 seconds (reversing cause our thing reversed)
+        sleep(28000);
+        // Step 1:  forward for 2.5 seconds
         left_front.setPower(FORWARD_SPEED);
         right_front.setPower(FORWARD_SPEED);
         left_back.setPower(FORWARD_SPEED);
         right_back.setPower(FORWARD_SPEED);
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.15)) {
+        while (opModeIsActive() && (runtime.seconds() < 2.0)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
 
-        // Step 2:  Turn left for 0.95 seconds)
-        left_front.setPower(FORWARD_SPEED);
-        right_front.setPower(FORWARD_SPEED);
-        left_back.setPower(FORWARD_SPEED);
-        right_back.setPower(FORWARD_SPEED);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.95)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
-        // Step 3:  Drive forward for 0.5 seconds (reversing cause our thing reversed)
-        left_front.setPower(-FORWARD_SPEED);
-        right_front.setPower(FORWARD_SPEED);
-        left_back.setPower(-FORWARD_SPEED);
-        right_back.setPower(FORWARD_SPEED);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
-        // Step 4:  Turn right for 0.95 seconds)
-        left_front.setPower(FORWARD_SPEED);
-        right_front.setPower(-FORWARD_SPEED);
-        left_back.setPower(FORWARD_SPEED);
-        right_back.setPower(-FORWARD_SPEED);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.95)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
-        // Step 5 :  Drive forward for 0.15 seconds (reversing cause our thing reversed)
-        left_front.setPower(FORWARD_SPEED);
-        right_front.setPower(FORWARD_SPEED);
-        left_back.setPower(FORWARD_SPEED);
-        right_back.setPower(FORWARD_SPEED);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.15)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
+//       update
         // Step 4:  Stop
         left_front.setPower(FORWARD_SPEED);
         right_front.setPower(FORWARD_SPEED);
