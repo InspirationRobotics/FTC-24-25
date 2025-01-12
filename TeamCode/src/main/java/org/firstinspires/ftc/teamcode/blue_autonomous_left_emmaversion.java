@@ -55,9 +55,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="blue_autonomous_left (emma's version)", group="Robot")
+@Autonomous(name="blue/red_autonomous_left (emma's version)", group="Robot")
 
-public class blue_autonomous_right extends LinearOpMode {
+public class blue_autonomous_left_emmaversion extends LinearOpMode {
 
     /* Declare OpMode members. */
     public DcMotor left_front = null;
@@ -174,7 +174,7 @@ public class blue_autonomous_right extends LinearOpMode {
         left_back.setPower(0);
         right_back.setPower(0);
 
-        //Pivot up for 2 seconds (TEST THIS NUMBER)
+        //Pivot up (it says down idk why but it works for going up) for 2 seconds (TEST THIS NUMBER)
 
         pivot.setPower(PIVOT_DOWN_POWER);
 
