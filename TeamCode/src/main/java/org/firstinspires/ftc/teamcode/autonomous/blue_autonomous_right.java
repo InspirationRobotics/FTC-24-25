@@ -107,18 +107,7 @@ public class blue_autonomous_right extends LinearOpMode {
             telemetry.update();
         }
 
-//        // Step 2:  move back for 1 seconds
-//        left_front.setPower(-FORWARD_SPEED);
-//        right_front.setPower(-FORWARD_SPEED);
-//        left_back.setPower(-FORWARD_SPEED);
-//        right_back.setPower(-FORWARD_SPEED);
 //
-//        runtime.reset();
-//        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-//            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-//            telemetry.update();
-//        }
-
         // Step 2:  Stop
         left_front.setPower(0);
         right_front.setPower(0);

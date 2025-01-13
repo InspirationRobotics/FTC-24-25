@@ -55,9 +55,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="blue/red_autonomous_left (emma's version)", group="Robot")
+@Autonomous(name="blue/red_autonomous_speciman (emma's version)", group="Robot")
 
-public class blue_autonomous_left_emmaversion extends LinearOpMode {
+public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
 
     /* Declare OpMode members. */
     public DcMotor left_front = null;
@@ -129,54 +129,22 @@ public class blue_autonomous_left_emmaversion extends LinearOpMode {
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 //all motors going forward speed=goes straight forward;
         //leftfront and rightback going forward, rightfront and leftback goes back= strafe right
-        // Step 1:  goes left for 1.9 second
-        left_front.setPower(-FORWARD_SPEED);
-        right_front.setPower(FORWARD_SPEED);
-        left_back.setPower(FORWARD_SPEED);
-        right_back.setPower(-FORWARD_SPEED);
+
+        pivot.setPower(PIVOT_DOWN_POWER);
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.7)) {
+        while (opModeIsActive() && (runtime.seconds() < 1.75)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-        //step 2: goes forward for 2.75 second
+
+    pivot.setPower(0);
+
+        // Step 1:  goes forward for 1.? second
         left_front.setPower(FORWARD_SPEED);
         right_front.setPower(FORWARD_SPEED);
         left_back.setPower(FORWARD_SPEED);
         right_back.setPower(FORWARD_SPEED);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 2.6)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
-        left_front.setPower(0);
-        right_front.setPower(0);
-        left_back.setPower(0);
-        right_back.setPower(0);
-
-        left_front.setPower(FORWARD_SPEED);
-        right_front.setPower(-FORWARD_SPEED);
-        left_back.setPower(FORWARD_SPEED);
-        right_back.setPower(-FORWARD_SPEED);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < .85)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
-
-        left_front.setPower(0);
-        right_front.setPower(0);
-        left_back.setPower(0);
-        right_back.setPower(0);
-
-        //Pivot up (it says down idk why but it works for going up) for 2 seconds (TEST THIS NUMBER)
-
-        pivot.setPower(PIVOT_DOWN_POWER);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 1.25)) {
@@ -184,51 +152,29 @@ public class blue_autonomous_left_emmaversion extends LinearOpMode {
             telemetry.update();
         }
 
-
-
-
-
-        //Extension Out of 1 second (TEST THIS NUMBER)
-
-        extension.setPower(EXTENSION_OUT_POWER);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < .5)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
-        pivot.setPower(PIVOT_UP_POWER);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < .25)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
-
-        left_front.setPower(FORWARD_SPEED);
-        right_front.setPower(FORWARD_SPEED);
-        left_back.setPower(FORWARD_SPEED);
-        right_back.setPower(FORWARD_SPEED);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < .5)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-//step 3: make robot turn right
-
-
-//
-        // Step 4:  Stop
         left_front.setPower(0);
         right_front.setPower(0);
         left_back.setPower(0);
         right_back.setPower(0);
 
-        pivot.setPower(0);
-        extension.setPower(0);
+        pivot.setPower(PIVOT_DOWN_POWER);
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < .5)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
+        left_front.setPower(-FORWARD_SPEED);
+        right_front.setPower(-FORWARD_SPEED);
+        left_back.setPower(-FORWARD_SPEED);
+        right_back.setPower(-FORWARD_SPEED);
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 1.25)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

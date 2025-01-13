@@ -95,26 +95,15 @@ public class red_autonomous_right extends LinearOpMode {
 
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
-        // Step 1:  Strafe right for 3.5 seconds
+
+        // Step 2:  move back for 1 seconds
         left_front.setPower(FORWARD_SPEED);
-        right_front.setPower(-FORWARD_SPEED);
-        left_back.setPower(-FORWARD_SPEED);
+        right_front.setPower(FORWARD_SPEED);
+        left_back.setPower(FORWARD_SPEED);
         right_back.setPower(FORWARD_SPEED);
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 3.5)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
-        // Step 2:  move back for 1 seconds
-        left_front.setPower(-FORWARD_SPEED);
-        right_front.setPower(-FORWARD_SPEED);
-        left_back.setPower(-FORWARD_SPEED);
-        right_back.setPower(-FORWARD_SPEED);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+        while (opModeIsActive() && (runtime.seconds() < 2.0)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }

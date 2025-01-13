@@ -94,7 +94,7 @@ public class blue_autonomous_left extends LinearOpMode {
         waitForStart();
 
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
-        sleep(28000);
+        sleep(25000);
         // Step 1:  forward for 2.5 seconds
         left_front.setPower(FORWARD_SPEED);
         right_front.setPower(FORWARD_SPEED);
@@ -102,7 +102,7 @@ public class blue_autonomous_left extends LinearOpMode {
         right_back.setPower(FORWARD_SPEED);
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 2.0)) {
+        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
