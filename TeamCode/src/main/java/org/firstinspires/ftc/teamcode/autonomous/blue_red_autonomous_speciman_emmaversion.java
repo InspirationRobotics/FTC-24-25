@@ -126,10 +126,8 @@ public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
         // Wait for the game to start (driver presses START)
         waitForStart();
 
-        // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
-//all motors going forward speed=goes straight forward;
-        //leftfront and rightback going forward, rightfront and leftback goes back= strafe right
 
+        //pivot motor goes up for .75 seconds
         pivot.setPower(PIVOT_DOWN_POWER);
 
         runtime.reset();
@@ -140,14 +138,44 @@ public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
 
     pivot.setPower(0);
 
-        // Step 1:  goes forward for 1.? second
+        //robot goes forward
         left_front.setPower(FORWARD_SPEED);
-        right_front.setPower(FORWARD_SPEED);
+        right_front.setPower(FORWARD_SPEED+.05);
         left_back.setPower(FORWARD_SPEED);
         right_back.setPower(FORWARD_SPEED);
 
         runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 1.45)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
+
+        left_front.setPower(0);
+        right_front.setPower(0);
+        left_back.setPower(0);
+        right_back.setPower(0);
+
+
+        //pivot moves up
+        pivot.setPower(PIVOT_UP_POWER);
+
+        runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 1.25)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
+        pivot.setPower(0);
+
+        sleep(1500);
+         left_front.setPower(-FORWARD_SPEED);
+        right_front.setPower(-FORWARD_SPEED-.05);
+        left_back.setPower(-FORWARD_SPEED);
+        right_back.setPower(-FORWARD_SPEED);
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < .45)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
@@ -157,24 +185,18 @@ public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
         left_back.setPower(0);
         right_back.setPower(0);
 
-        pivot.setPower(PIVOT_DOWN_POWER);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < .5)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
-        left_front.setPower(-FORWARD_SPEED);
-        right_front.setPower(-FORWARD_SPEED);
+        left_front.setPower(FORWARD_SPEED);
+        right_front.setPower(-FORWARD_SPEED-.05);
         left_back.setPower(-FORWARD_SPEED);
-        right_back.setPower(-FORWARD_SPEED);
+        right_back.setPower(FORWARD_SPEED);
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.25)) {
+        while (opModeIsActive() && (runtime.seconds() < 2)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
+
+
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
