@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * This OpMode illustrates the concept of driving a path based on time.
  * The code is structured as a LinearOpMode
  *
- * The code assumes that you do NOT have encoders on the wheels,
+ * The code assumes that you do NOT have encoders  on the wheels,
  *   otherwise you would use: RobotAutoDriveByEncoder;
  *
  *   The desired path in this example is:

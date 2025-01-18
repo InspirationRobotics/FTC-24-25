@@ -140,7 +140,7 @@ public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
 
         //robot goes forward
         left_front.setPower(FORWARD_SPEED);
-        right_front.setPower(FORWARD_SPEED+.05);
+        right_front.setPower(FORWARD_SPEED);
         left_back.setPower(FORWARD_SPEED);
         right_back.setPower(FORWARD_SPEED);
 
@@ -170,12 +170,12 @@ public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
 
         sleep(1500);
          left_front.setPower(-FORWARD_SPEED);
-        right_front.setPower(-FORWARD_SPEED-.05);
+        right_front.setPower(-FORWARD_SPEED);
         left_back.setPower(-FORWARD_SPEED);
         right_back.setPower(-FORWARD_SPEED);
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < .45)) {
+        while (opModeIsActive() && (runtime.seconds() < .65)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
@@ -186,7 +186,7 @@ public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
         right_back.setPower(0);
 
         left_front.setPower(FORWARD_SPEED);
-        right_front.setPower(-FORWARD_SPEED-.05);
+        right_front.setPower(-FORWARD_SPEED);
         left_back.setPower(-FORWARD_SPEED);
         right_back.setPower(FORWARD_SPEED);
 
