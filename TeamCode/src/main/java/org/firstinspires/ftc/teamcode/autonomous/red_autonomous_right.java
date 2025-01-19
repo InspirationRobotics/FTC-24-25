@@ -96,7 +96,7 @@ public class red_autonomous_right extends LinearOpMode {
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
 
-        // Step 2:  move back for 1 seconds
+        // Step 2:  move forward for 2 seconds
         left_front.setPower(FORWARD_SPEED);
         right_front.setPower(FORWARD_SPEED);
         left_back.setPower(FORWARD_SPEED);
