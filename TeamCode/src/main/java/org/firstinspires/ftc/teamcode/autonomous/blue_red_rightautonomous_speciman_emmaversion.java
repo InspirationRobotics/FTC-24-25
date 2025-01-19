@@ -57,7 +57,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="blue/red_autonomous_speciman (emma's version)", group="Robot")
 
-public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
+public class blue_red_rightautonomous_speciman_emmaversion extends LinearOpMode {
 
     /* Declare OpMode members. */
     public DcMotor left_front = null;
@@ -127,7 +127,7 @@ public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
         waitForStart();
 
 
-        //pivot motor goes up for .75 seconds
+        //Step 1: pivot motor goes up for 1.75 seconds
         pivot.setPower(PIVOT_DOWN_POWER);
 
         runtime.reset();
@@ -138,7 +138,7 @@ public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
 
     pivot.setPower(0);
 
-        //robot goes forward
+        //Step 2: robot goes forward for 1.45 seconds to be parallel with the bars
         left_front.setPower(FORWARD_SPEED);
         right_front.setPower(FORWARD_SPEED);
         left_back.setPower(FORWARD_SPEED);
@@ -157,7 +157,7 @@ public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
         right_back.setPower(0);
 
 
-        //pivot moves up
+        //Step 3: pivot moves down
         pivot.setPower(PIVOT_UP_POWER);
 
         runtime.reset();
@@ -169,13 +169,15 @@ public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
         pivot.setPower(0);
 
         sleep(1500);
+
+        //Step 4: robot goes backwards for .75 seconds
          left_front.setPower(-FORWARD_SPEED);
         right_front.setPower(-FORWARD_SPEED);
         left_back.setPower(-FORWARD_SPEED);
         right_back.setPower(-FORWARD_SPEED);
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < .65)) {
+        while (opModeIsActive() && (runtime.seconds() < .75)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
@@ -185,13 +187,14 @@ public class blue_red_autonomous_speciman_emmaversion extends LinearOpMode {
         left_back.setPower(0);
         right_back.setPower(0);
 
+        //Step 5: strafe right 2.5 sec to park
         left_front.setPower(FORWARD_SPEED);
         right_front.setPower(-FORWARD_SPEED);
         left_back.setPower(-FORWARD_SPEED);
         right_back.setPower(FORWARD_SPEED);
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 2)) {
+        while (opModeIsActive() && (runtime.seconds() < 2.5)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
