@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp(name="LM2 teleop", group="Robot")
+@TeleOp(name="LM3 teleop", group="Robot")
 
 public class current_teleop extends LinearOpMode {
 
@@ -60,7 +60,7 @@ public class current_teleop extends LinearOpMode {
         pivot_home_pos = 0;
 
         left_front.setDirection(DcMotor.Direction.REVERSE);
-        right_front.setDirection(DcMotor.Direction.FORWARD);
+        right_front.setDirection(DcMotor.Direction.REVERSE);
         left_back.setDirection(DcMotor.Direction.REVERSE);
         right_back.setDirection(DcMotor.Direction.FORWARD);
 
