@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -40,7 +40,7 @@ public class rr_teleop extends OpMode {
 
     private double EXTENSION_OFF_POWER = 0.0;
     double intake_init_power = INTAKE_OFF_POWER;
-    double extension_init_power = EXTENSION_OFF_POWER;
+    double extension_power = EXTENSION_OFF_POWER;
 
     double pivotPower;
     private double PIVOT_UP_POWER = 0.8;
@@ -76,7 +76,7 @@ public class rr_teleop extends OpMode {
 
         pivot_home_pos = 0;
         intake.setPower(intake_init_power);
-        extension.setPower(extension_init_power);
+        extension.setPower(extension_power);
     }
 
     @Override
@@ -222,19 +222,13 @@ public class rr_teleop extends OpMode {
                     new InstantAction(() -> intake.setPower(INTAKE_OFF_POWER)
                     )));
         }
-        // putting extension out
+        // EXTENSION CODE
         if (extensionOutButton) {
-            runningActions.add(new SequentialAction(
-                    new SleepAction(0.5),
-                    new InstantAction(() -> extension.setPower(EXTENSION_OUT_POWER)
-                    )));
-        }
-        // putting extension in
-        if (extensionInButton) {
-            runningActions.add(new SequentialAction(
-                    new SleepAction(0.5),
-                    new InstantAction(() -> extension.setPower(EXTENSION_IN_POWER)
-                    )));
+            extension_power = EXTENSION_OUT_POWER;
+        } else if (extensionInButton) {
+            extension_power = EXTENSION_IN_POWER;
+        } else {
+            extension_power = EXTENSION_OFF_POWER;
         }
 
         // PIVOT CODE
