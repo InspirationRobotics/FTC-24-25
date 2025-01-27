@@ -1,28 +1,28 @@
-
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @TeleOp(name = "Encoder Test ")
 public class encoder_test extends OpMode {
-    DcMotor motor;
+    public DcMotor pivot = null;
     double ticks = 1425.1;
     double newTarget;
     @Override
     public void init() {
-        motor = hardwareMap.get(DcMotor.class, "motor");
+        pivot = hardwareMap.get(DcMotorEx.class, "pivot");
         telemetry.addData("Hardware: ", "Initialized");
-        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        pivot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
     public void loop() {
         if(gamepad1.a){
-            encoder(2);
+            encoder(-1);
         }
-        telemetry.addData("Motor Ticks: ", motor.getCurrentPosition());
+        telemetry.addData("Motor Ticks: ", pivot.getCurrentPosition());
         if(gamepad1.b){
             tracker();
         }
@@ -30,14 +30,14 @@ public class encoder_test extends OpMode {
     }
     public void encoder(int turnage){
         newTarget = ticks/turnage;
-        motor.setTargetPosition((int)newTarget);
-        motor.setPower(0.3);
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        pivot.setTargetPosition((int)newTarget);
+        pivot.setPower(0.8);
+        pivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
     public void tracker(){
-        motor.setTargetPosition(0);
-        motor.setPower(0.8);
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        pivot.setTargetPosition(0);
+        pivot.setPower(0.8);
+        pivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
 }
