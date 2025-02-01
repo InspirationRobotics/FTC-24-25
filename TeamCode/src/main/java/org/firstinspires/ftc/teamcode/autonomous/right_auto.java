@@ -27,12 +27,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -54,38 +55,67 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="red_autonomous", group="Robot")
+@Autonomous(name="right_auto", group="Robot")
 
-public class red_autonomous_short extends LinearOpMode {
+public class right_auto extends LinearOpMode {
 
     /* Declare OpMode members. */
-    private DcMotor   leftDrive   = null;
-    private DcMotor   rightDrive  = null;
-
-    public Servo wrist       = null; //the wrist servo
+    public DcMotor left_front = null;
+    public DcMotor right_front = null;
+    public DcMotor left_back = null;
+    public DcMotor right_back = null;
+    public DcMotor extension = null;
+    private DcMotorEx pivot = null;
+    private CRServo intake = null;
 
     private ElapsedTime     runtime = new ElapsedTime();
 
-    final double WRIST_FOLDED_OUT  = 0.45;
     static final double     FORWARD_SPEED = 0.6;
     static final double     TURN_SPEED    = 0.5;
+
+    private double INTAKE_IN_POWER = 1.0;
+    private double INTAKE_OUT_POWER = -1.0;
+    private double INTAKE_OFF_POWER = 0.0;
+
+    private double EXTENSION_OUT_POWER = 1.0;
+    private double EXTENSION_IN_POWER = -1.0;
+
+    private double EXTENSION_OFF_POWER = 0.0;
+    private double intakePower = INTAKE_OFF_POWER;
+    double extensionPower = EXTENSION_OFF_POWER;
+
+    double pivotPower;
+    private double PIVOT_UP_POWER = 0.8;
+    private double PIVOT_DOWN_POWER = -0.7;
+    private double PIVOT_HOLD_POWER = 0.010;
+
+    private enum PivotModes {UP, HOLD, DOWN};
 
 
     @Override
     public void runOpMode() {
 
         // Initialize the drive system variables.
-        leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        wrist  = hardwareMap.get(Servo.class, "wrist");
+        left_front = hardwareMap.get(DcMotor.class, "leftFront");
+        right_front = hardwareMap.get(DcMotor.class, "rightFront");
+        left_back = hardwareMap.get(DcMotor.class, "leftBack");
+        right_back = hardwareMap.get(DcMotor.class, "rightBack");
 
+        intake = hardwareMap.get(CRServo.class, "intake");
+        extension = hardwareMap.get(DcMotor.class, "extension");
+        pivot = hardwareMap.get(DcMotorEx.class, "pivot");
+
+        intake.setDirection(CRServo.Direction.FORWARD);
+        extension.setDirection(DcMotor.Direction.FORWARD);
+        pivot.setDirection(DcMotor.Direction.FORWARD);
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        wrist.setPosition(WRIST_FOLDED_OUT);
+
+        right_front.setDirection(DcMotor.Direction.REVERSE);
+        right_back.setDirection(DcMotor.Direction.REVERSE);
+
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -94,38 +124,80 @@ public class red_autonomous_short extends LinearOpMode {
         // Wait for the game to start (driver presses START)
         waitForStart();
 
-        // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
-        // Step 1:  Drive forward for 0.15 seconds (reversing cause our thing reversed)
-        leftDrive.setPower(FORWARD_SPEED);
-        rightDrive.setPower(FORWARD_SPEED);
+        //Step 1: pivot motor goes up for 1.75 seconds
+        pivot.setPower(PIVOT_DOWN_POWER);
+
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.15)) {
+        while (opModeIsActive() && (runtime.seconds() < 1.75)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
 
-        // Step 2:  Turn left for 0.95 seconds)
-        leftDrive.setPower(-TURN_SPEED);
-        rightDrive.setPower(TURN_SPEED);
+        pivot.setPower(0);
+
+        //Step 2: robot goes forward for 1.45 seconds to be parallel with the bars
+        left_front.setPower(FORWARD_SPEED);
+        right_front.setPower(FORWARD_SPEED);
+        left_back.setPower(FORWARD_SPEED);
+        right_back.setPower(FORWARD_SPEED);
+
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.95)) {
+        while (opModeIsActive() && (runtime.seconds() < 1.45)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
 
-        // Step 3:  Drive forward for 0.5 seconds (reversing cause our thing reversed)
-        leftDrive.setPower(FORWARD_SPEED);
-        rightDrive.setPower(FORWARD_SPEED);
+
+        left_front.setPower(0);
+        right_front.setPower(0);
+        left_back.setPower(0);
+        right_back.setPower(0);
+
+
+        //Step 3: pivot moves down
+        pivot.setPower(PIVOT_UP_POWER);
+
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+        while (opModeIsActive() && (runtime.seconds() < 1.25)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
 
-        // Step 4:  Stop
-        leftDrive.setPower(0);
-        rightDrive.setPower(0);
+        pivot.setPower(0);
+
+        sleep(1500);
+
+        //Step 4: robot goes backwards for .75 seconds
+        left_front.setPower(-FORWARD_SPEED);
+        right_front.setPower(-FORWARD_SPEED);
+        left_back.setPower(-FORWARD_SPEED);
+        right_back.setPower(-FORWARD_SPEED);
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < .75)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
+        left_front.setPower(0);
+        right_front.setPower(0);
+        left_back.setPower(0);
+        right_back.setPower(0);
+
+        //Step 5: strafe right 2.5 sec to park
+        left_front.setPower(FORWARD_SPEED);
+        right_front.setPower(-FORWARD_SPEED);
+        left_back.setPower(-FORWARD_SPEED);
+        right_back.setPower(FORWARD_SPEED);
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 2.1)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
+
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
