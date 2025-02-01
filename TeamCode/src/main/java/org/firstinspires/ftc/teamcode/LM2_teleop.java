@@ -28,6 +28,9 @@ public class LM2_teleop extends LinearOpMode {
 
     private double EXTENSION_OUT_POWER = 1.0;
     private double EXTENSION_IN_POWER = -1.0;
+    private double EXTENSION_OFF_POWER = 0.0;
+
+    private double extensionPower = EXTENSION_OFF_POWER;
 
     private int pivot_target_pos;
     private int pivot_home_pos;
@@ -35,8 +38,8 @@ public class LM2_teleop extends LinearOpMode {
     private double PIVOT_UP_POWER = 0.25;
     private double PIVOT_DOWN_POWER = -0.0125;
     private double PIVOT_HOLD_POWER = 0.001;
-    private enum PivotModes {UP, HOLD, DOWN};
-    private PivotModes pivotMode;
+    public enum PivotModes {UP, HOLD, DOWN};
+    public PivotModes pivotMode;
 
 
     @Override
