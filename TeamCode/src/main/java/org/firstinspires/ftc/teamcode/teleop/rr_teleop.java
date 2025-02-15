@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +26,17 @@ public class rr_teleop extends OpMode {
     public DcMotor right_front = null;
     public DcMotor left_back = null;
     public DcMotor right_back = null;
-    private CRServo intake = null;
+    private Servo claw = null;
     public DcMotor extension = null;
     private DcMotorEx pivot = null;
 
     private int pivot_target_pos;
     public int pivot_home_pos;
-    private double INTAKE_IN_POWER = 1.0;
-    private double INTAKE_OUT_POWER = -1.0;
-    private double INTAKE_OFF_POWER = 0.0;
 
     private double EXTENSION_OUT_POWER = 1.0;
     private double EXTENSION_IN_POWER = -1.0;
 
     private double EXTENSION_OFF_POWER = 0.0;
-    double intake_init_power = INTAKE_OFF_POWER;
     double extension_power = EXTENSION_OFF_POWER;
 
     double pivotPower;
@@ -55,11 +52,10 @@ public class rr_teleop extends OpMode {
         right_front = hardwareMap.get(DcMotor.class, "rightFront");
         left_back = hardwareMap.get(DcMotor.class, "leftBack");
         right_back = hardwareMap.get(DcMotor.class, "rightBack");
-        intake = hardwareMap.get(CRServo.class, "intake");
+        claw = hardwareMap.get(Servo.class, "claw");
         extension = hardwareMap.get(DcMotor.class, "extension");
         pivot = hardwareMap.get(DcMotorEx.class, "pivot");
 
-        intake.setDirection(CRServo.Direction.FORWARD); // Forward should INTAKE.
 
         //right motors reversed for movement
         right_front.setDirection(DcMotor.Direction.REVERSE);
@@ -75,7 +71,6 @@ public class rr_teleop extends OpMode {
         right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         pivot_home_pos = 0;
-        intake.setPower(intake_init_power);
         extension.setPower(extension_power);
     }
 
@@ -191,9 +186,8 @@ public class rr_teleop extends OpMode {
             ));
 
         // controls for driver 2
-        boolean intakeInButton = gamepad2.a;
-        boolean intakeOutButton = gamepad2.y;
-        boolean intakeOffButton = gamepad2.x;
+        boolean clawOpenButton = gamepad2.a;
+        boolean clawCloseButton = gamepad2.b;
 
         boolean extensionOutButton = gamepad2.left_trigger > 0.2;
         boolean extensionInButton = gamepad2.left_bumper;
@@ -201,27 +195,13 @@ public class rr_teleop extends OpMode {
         boolean pivotUpButton = gamepad2.right_bumper;
         boolean pivotDownButton = gamepad2.right_trigger > 0.2;
 
-        // taking sample/specimen in
-        if (intakeInButton) {
-            runningActions.add(new SequentialAction(
-                    new SleepAction(0.5),
-                    new InstantAction(() -> intake.setPower(INTAKE_IN_POWER)
-                    )));
+        if (clawOpenButton) {
+            claw.setPosition(0.7);
         }
-        // putting sample/specimen out
-        if (intakeOutButton) {
-            runningActions.add(new SequentialAction(
-                    new SleepAction(0.5),
-                    new InstantAction(() -> intake.setPower(INTAKE_OUT_POWER)
-                    )));
+        else if (clawCloseButton) {
+            claw.setPosition(-0.5);
         }
-        // putting sample/specimen out
-        if (intakeOffButton) {
-            runningActions.add(new SequentialAction(
-                    new SleepAction(0.5),
-                    new InstantAction(() -> intake.setPower(INTAKE_OFF_POWER)
-                    )));
-        }
+
         // EXTENSION CODE
         if (extensionOutButton) {
             extension_power = EXTENSION_OUT_POWER;

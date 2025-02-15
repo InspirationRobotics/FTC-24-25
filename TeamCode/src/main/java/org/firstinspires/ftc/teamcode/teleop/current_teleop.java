@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -6,16 +6,17 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="Into the Deep - LM2 teleop", group="Robot")
+@TeleOp(name="current_teleop", group="Robot")
 
-public class LM2_teleop extends LinearOpMode {
+public class current_teleop extends LinearOpMode {
 
     public DcMotor left_front = null;
     public DcMotor right_front = null;
     public DcMotor left_back = null;
     public DcMotor right_back = null;
-    private CRServo intake = null;
+    private Servo claw = null;
     private DcMotor extension = null;
     private DcMotorEx pivot = null;
 
@@ -48,11 +49,11 @@ public class LM2_teleop extends LinearOpMode {
         right_front = hardwareMap.get(DcMotor.class, "rightFront");
         left_back = hardwareMap.get(DcMotor.class, "leftBack");
         right_back = hardwareMap.get(DcMotor.class, "rightBack");
-        intake = hardwareMap.get(CRServo.class, "intake");
+        claw = hardwareMap.get(Servo.class, "claw");
         extension = hardwareMap.get(DcMotor.class, "extension");
         pivot = hardwareMap.get(DcMotorEx.class, "pivot");
 
-        intake.setDirection(CRServo.Direction.FORWARD); // Forward should INTAKE.
+        claw.setDirection(Servo.Direction.FORWARD); // Forward should INTAKE.
         extension.setDirection(DcMotor.Direction.REVERSE); // Forward should EXTEND.
         pivot.setDirection(DcMotor.Direction.REVERSE); // Forward should pivot UP, or away from the stowed position.
 
@@ -114,12 +115,11 @@ public class LM2_teleop extends LinearOpMode {
             }
 
             // INTAKE CODE
-            if (intakeInButton) {
-                intakePower = INTAKE_IN_POWER;
-            } else if (intakeOutButton) {
-                intakePower = INTAKE_OUT_POWER;
-            } else if (intakeOffButton) {
-                intakePower = 0.0;
+            if (gamepad2.a) {
+                claw.setPosition(0.7);
+            }
+            else if (gamepad2.b) {
+                claw.setPosition(-0.5);
             }
 
             // EXTENSION CODE
