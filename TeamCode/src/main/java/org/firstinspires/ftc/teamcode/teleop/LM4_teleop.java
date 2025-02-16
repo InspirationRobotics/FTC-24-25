@@ -76,7 +76,7 @@ public class LM4_teleop extends LinearOpMode {
 
             double axial   = gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
             double lateral =  -gamepad1.left_stick_x;
-            double yaw     =  gamepad1.right_stick_x;
+            double yaw     =  -gamepad1.right_stick_x;
 
             // DRIVE CODE
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
@@ -91,8 +91,8 @@ public class LM4_teleop extends LinearOpMode {
             left_back.setPower(leftBackPower);
             right_back.setPower(rightBackPower);
 
-            boolean intakeInButton = gamepad2.a;
-            boolean intakeOutButton = gamepad2.y;
+            boolean intakeInButton = gamepad2.y;
+            boolean intakeOutButton = gamepad2.a;
             boolean intakeOffButton = gamepad2.x;
 
             boolean extensionOutButton = gamepad2.left_trigger > 0.2;
