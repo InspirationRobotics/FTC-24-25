@@ -211,6 +211,15 @@ public class rr_teleop extends OpMode {
             extension_power = EXTENSION_OFF_POWER;
         }
 
+        double extensionPower;
+        if (extensionOutButton) {
+            extensionPower = EXTENSION_OUT_POWER;
+        } else if (extensionInButton) {
+            extensionPower = EXTENSION_IN_POWER;
+        } else {
+            extensionPower = 0;
+        }
+
         // PIVOT CODE
         if (pivotUpButton) {
             pivotMode = rr_teleop.PivotModes.UP;
@@ -230,6 +239,7 @@ public class rr_teleop extends OpMode {
             pivotPower = PIVOT_HOLD_POWER;
         }
 
+        extension.setPower(extensionPower);
         pivot.setTargetPosition(pivot_target_pos);
         pivot.setPower(pivotPower);
 

@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -29,22 +30,32 @@ public class specimen_auto extends LinearOpMode {
         claw.setPosition(-0.5);
 
         Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                .stopAndAdd(new movePivot(pivot, -310))
-                .waitSeconds(0.5)
-                .lineToX(18)
                 .stopAndAdd(new movePivot(pivot, -1952))
-                .waitSeconds(1)
-                .lineToX(31)
-                .waitSeconds(1)
-                .stopAndAdd(new movePivot(pivot, -1500))
                 .waitSeconds(0.5)
+                .lineToX(31)
+                .waitSeconds(0.5)
+                .stopAndAdd(new movePivot(pivot, -1100))
+                .waitSeconds(0.3)
                 .stopAndAdd(new moveClaw(claw, 0.7))
                 .waitSeconds(0.5)
                 .lineToX(16)
                 .stopAndAdd(new movePivot(pivot, -310))
                 .waitSeconds(0.5)
-                .strafeToConstantHeading(new Vector2d(16, -40))
+                .strafeToConstantHeading(new Vector2d(16, -38))
                 .waitSeconds(0.5)
+                .lineToX(53)
+                .strafeTo(new Vector2d(53, -45.5))
+                .waitSeconds(0.2)
+                .lineToX(11)
+                .lineToX(50)
+                .strafeTo(new Vector2d(50, -57))
+                .waitSeconds(0.2)
+                .lineToX(11)
+                .waitSeconds(0.2)
+                .lineToX(53)
+                .strafeTo(new Vector2d(50, -68))
+                .waitSeconds(0.2)
+                .lineToX(4)
                 .build()
         );
     }
