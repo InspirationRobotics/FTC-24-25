@@ -6,31 +6,30 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="Solo telop", group="Robot")
+@TeleOp(name="SoloDriverPractice1", group="Robot")
 
-public class SoloDriverPractice extends LinearOpMode {
+public class SoloDriverPractice1 extends LinearOpMode {
 
     public DcMotor left_front = null;
     public DcMotor right_front = null;
     public DcMotor left_back = null;
     public DcMotor right_back = null;
-    private Servo claw = null;
+    private CRServo intake = null;
     public DcMotor extension = null;
     private DcMotorEx pivot = null;
 
     private int pivot_target_pos;
     private int pivot_home_pos;
-    private double CLAW_IN_POWER = .40;
-    private double CLAW_OUT_POWER = -.40;
-    private double CLAW_OFF_POWER = 0.0;
+    private double INTAKE_IN_POWER = .40;
+    private double INTAKE_OUT_POWER = -.40;
+    private double INTAKE_OFF_POWER = 0.0;
 
     private double EXTENSION_OUT_POWER = 1.0;
     private double EXTENSION_IN_POWER = -1.0;
 
     private double EXTENSION_OFF_POWER = 0.0;
-    private double intakePower = CLAW_OFF_POWER;
+    private double intakePower = INTAKE_OFF_POWER;
     double extensionPower = EXTENSION_OFF_POWER;
 
     double pivotPower;
@@ -47,11 +46,11 @@ public class SoloDriverPractice extends LinearOpMode {
         right_front = hardwareMap.get(DcMotor.class, "rightFront");
         left_back = hardwareMap.get(DcMotor.class, "leftBack");
         right_back = hardwareMap.get(DcMotor.class, "rightBack");
-        claw = hardwareMap.get(Servo.class, "claw");
+        intake = hardwareMap.get(CRServo.class, "claw");
         extension = hardwareMap.get(DcMotor.class, "extension");
         pivot = hardwareMap.get(DcMotorEx.class, "pivot");
 
-        claw.setDirection(Servo.Direction.FORWARD); // Forward should INTAKE.
+        intake.setDirection(CRServo.Direction.FORWARD); // Forward should INTAKE.
 //        extension.setDirection(DcMotor.Direction.REVERSE); // Forward should EXTEND.
 //        pivot.setDirection(DcMotor.Direction.REVERSE); // Forward should pivot UP, or away from the stowed position.
 
@@ -75,9 +74,9 @@ public class SoloDriverPractice extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            double axial   = gamepad2.left_stick_y;  // Note: pushing stick forward gives negative value
-            double lateral =  -gamepad2.left_stick_x;
-            double yaw     =  -gamepad2.right_stick_x;
+            double axial   = gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+            double lateral =  -gamepad1.left_stick_x;
+            double yaw     =  -gamepad1.right_stick_x;
 
             // DRIVE CODE
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
@@ -105,11 +104,11 @@ public class SoloDriverPractice extends LinearOpMode {
 
             // INTAKE CODE
             if (intakeInButton) {
-                intakePower = CLAW_IN_POWER;
+                intakePower = INTAKE_IN_POWER;
             } else if (intakeOutButton) {
-                intakePower = CLAW_OUT_POWER;
+                intakePower = INTAKE_OUT_POWER;
             } else if (intakeOffButton) {
-                intakePower = CLAW_OFF_POWER;
+                intakePower = INTAKE_OFF_POWER;
             }
 
             // EXTENSION CODE
@@ -140,7 +139,7 @@ public class SoloDriverPractice extends LinearOpMode {
                 pivotPower = PIVOT_HOLD_POWER;
             }
 
-            claw.setPosition(intakePower);
+            intake.setPower(intakePower);
             extension.setPower(extensionPower);
             pivot.setTargetPosition(pivot_target_pos);
             pivot.setPower(pivotPower);
