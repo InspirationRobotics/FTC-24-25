@@ -74,9 +74,9 @@ public class SoloDriverPractice1 extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            double axial   = gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
-            double lateral =  -gamepad1.left_stick_x;
-            double yaw     =  -gamepad1.right_stick_x;
+            double axial   = gamepad2.left_stick_y;  // Note: pushing stick forward gives negative value
+            double lateral =  -gamepad2.left_stick_x;
+            double yaw     =  -gamepad2.right_stick_x;
 
             // DRIVE CODE
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
