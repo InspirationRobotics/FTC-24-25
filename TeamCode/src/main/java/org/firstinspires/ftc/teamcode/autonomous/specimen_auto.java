@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -22,12 +23,12 @@ public class specimen_auto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-        Servo claw = hardwareMap.servo.get("claw");
+        CRServo claw = hardwareMap.get(CRServo.class, "claw");
         DcMotorEx pivot = hardwareMap.get(DcMotorEx.class, "pivot");
 
         waitForStart();
 
-        claw.setPosition(-0.5);
+        claw.setPower(-1.0);
 
         Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
                 .stopAndAdd(new movePivot(pivot, -1952))
@@ -36,7 +37,7 @@ public class specimen_auto extends LinearOpMode {
                 .waitSeconds(0.5)
                 .stopAndAdd(new movePivot(pivot, -1100))
                 .waitSeconds(0.3)
-                .stopAndAdd(new moveClaw(claw, 0.7))
+                .stopAndAdd(new moveClaw(claw, 1.0))
                 .waitSeconds(0.5)
                 .lineToX(16)
                 .stopAndAdd(new movePivot(pivot, -310))
@@ -62,17 +63,17 @@ public class specimen_auto extends LinearOpMode {
 
     public class moveClaw implements Action {
 
-        Servo claw;
-        double position;
+        CRServo claw;
+        double power;
 
-        public moveClaw(Servo s, double pos) {
+        public moveClaw(CRServo s, double power) {
             this.claw = s;
-            this.position = pos;
+            this.power = power;
         }
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            claw.setPosition(position);
+            claw.setPower(power);
             return false;
         }
     }
