@@ -17,65 +17,63 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous(name="specimen_auto")
-public class specimen_auto extends LinearOpMode {
+@Autonomous(name="three_specimen_auto")
+public class three_specimen_auto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-        CRServo claw = hardwareMap.get(CRServo.class, "claw");
+        Servo claw = hardwareMap.get(Servo.class, "claw");
         DcMotorEx pivot = hardwareMap.get(DcMotorEx.class, "pivot");
 
         waitForStart();
 
-        claw.setPower(-1.0);
+        claw.setPosition(-1.0);
 
         Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                .stopAndAdd(new movePivot(pivot, -1952))
-                .waitSeconds(0.5)
-                .lineToX(31)
-                .waitSeconds(0.5)
-                .stopAndAdd(new movePivot(pivot, -1100))
-                .waitSeconds(0.3)
-                .stopAndAdd(new moveClaw(claw, 1.0))
-                .waitSeconds(0.5)
-                .lineToX(16)
-                .stopAndAdd(new movePivot(pivot, -310))
-                .waitSeconds(0.5)
-                .strafeToConstantHeading(new Vector2d(16, -30))
-                .waitSeconds(0.2)
-                .lineToX(53)
-                .strafeTo(new Vector2d(53, -37))
-                .waitSeconds(0.2)
-                .lineToX(11)
-                .lineToX(50)
-                .strafeTo(new Vector2d(50, -47))
-                .waitSeconds(0.2)
-                .lineToX(11)
-//                .waitSeconds(0.2)
-                .lineToX(53)
-                .strafeTo(new Vector2d(50, -56))
-                .waitSeconds(0.2)
-                .lineToX(4)
-                .lineToX(10)
-                .turnTo(180)
-                .build()
+                        .stopAndAdd(new movePivot(pivot, -1952))
+                        .waitSeconds(0.5)
+                        .lineToX(31)
+                        .stopAndAdd(new movePivot(pivot, -1100))
+                        .waitSeconds(0.4)
+                        .stopAndAdd(new moveClaw(claw, 0.7))
+                        .waitSeconds(0.5)
+                        .lineToX(16)
+                        .stopAndAdd(new movePivot(pivot, -310))
+                        .waitSeconds(0.5)
+                        .strafeToConstantHeading(new Vector2d(16, -30))
+                        .waitSeconds(0.2)
+                        .lineToX(53)
+                        .strafeTo(new Vector2d(47, -37))
+                        .waitSeconds(0.2)
+                        .lineToX(11)
+                        .lineToX(50)
+                        .strafeTo(new Vector2d(47, -47))
+                        .waitSeconds(0.2)
+                        .lineToX(8)
+                        .lineToX(12)
+                        .turnTo(135)
+                        .stopAndAdd(new movePivot(pivot, -460))
+                        .lineToX(-2)
+                        .stopAndAdd(new moveClaw(claw, -1.0))
+                        .waitSeconds(0.2)
+                        .build()
         );
     }
 
     public class moveClaw implements Action {
 
-        CRServo claw;
-        double power;
+        Servo claw;
+        double position;
 
-        public moveClaw(CRServo s, double power) {
+        public moveClaw(Servo s, double pos) {
             this.claw = s;
-            this.power = power;
+            this.position = pos;
         }
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            claw.setPower(power);
+            claw.setPosition(position);
             return false;
         }
     }
@@ -99,3 +97,4 @@ public class specimen_auto extends LinearOpMode {
         }
     }
 }
+
