@@ -21,7 +21,7 @@ public class SoloDriverPractice1 extends LinearOpMode {
 
     private int pivot_target_pos;
     private int pivot_home_pos;
-    private double INTAKE_IN_POWER = .40;
+    private double INTAKE_IN_POWER = 1.00;
     private double INTAKE_OUT_POWER = -.40;
     private double INTAKE_OFF_POWER = 0.0;
 
